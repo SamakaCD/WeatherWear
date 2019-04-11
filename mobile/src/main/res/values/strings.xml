@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">WeatherWear</string>
+	<string name="app_name">WeatherWear</string>
+	<string name="feedback_email">samakacd@gmail.com</string>
+	<string name="feedback_subject">WeatherWear feedback</string>
+	<string name="settings_title">Settings</string>
+	<string name="settings_select_location">Select a location</string>
+	<string name="settings_send_feedback">Send a feedback</string>
 </resources>

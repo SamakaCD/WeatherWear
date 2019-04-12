@@ -9,16 +9,20 @@ import android.os.Bundle
 import android.support.wearable.activity.WearableActivity
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.ivansadovyi.weather.wear.api.ApiServiceContainer
 import com.ivansadovyi.weather.wear.databinding.ActivityMainBinding
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+
+
 
 
 class MainActivity : WearableActivity() {
@@ -28,8 +32,8 @@ class MainActivity : WearableActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+		Fabric.with(this, Crashlytics())
 		coroutineScope.launch(exceptionHandler) {
 			requestNetwork()
 			val location = fetchLocation()

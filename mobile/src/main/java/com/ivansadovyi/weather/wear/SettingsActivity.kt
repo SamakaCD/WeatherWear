@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.wearable.PutDataMapRequest
 import com.google.android.gms.wearable.Wearable
 import com.google.android.libraries.places.api.Places
@@ -13,6 +14,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.util.*
 
@@ -22,6 +24,7 @@ class SettingsActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		Fabric.with(this, Crashlytics())
 		preferences = Preferences(this)
 		setContentView(R.layout.activity_settings)
 		setTitle(R.string.settings_title)

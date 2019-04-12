@@ -1,26 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.wear.widget.BoxInsetLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+
+		<variable
+			name="loading"
+			type="Boolean" />
+
+		<variable
+			name="currentWeather"
+			type="com.ivansadovyi.weather.wear.Weather" />
+	</data>
+
+	<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
-		android:background="@color/dark_grey"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:context=".MainActivity"
-		tools:deviceIds="wear"
-		android:padding="@dimen/box_inset_layout_padding">
+		android:animateFirstView="false"
+		android:inAnimation="@android:anim/fade_in"
+		android:outAnimation="@android:anim/fade_out"
+		app:displayedChild="@{(loading ?? true) ? 1 : 0}">
 
-	<FrameLayout
+		<ScrollView
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:padding="@dimen/inner_frame_layout_padding"
-			app:boxedEdges="all">
+			android:clipToPadding="false"
+			android:padding="@dimen/screen_padding">
 
-		<TextView
-				android:id="@+id/text"
-				android:layout_width="wrap_content"
+			<LinearLayout
+				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="@string/hello_world"/>
+				android:gravity="center_horizontal"
+				android:orientation="vertical">
 
-	</FrameLayout>
-</androidx.wear.widget.BoxInsetLayout>
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="bottom"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_width="64dp"
+						android:layout_height="64dp"
+						app:imageResource="@{currentWeather.icon}"
+						tools:src="@drawable/ic_sunny" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="8dp"
+						android:text="@{`` + currentWeather.temperature + `°`}"
+						android:textSize="48sp"
+						android:textStyle="bold"
+						tools:text="12°" />
+				</LinearLayout>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{currentWeather.description}"
+					tools:text="Sunny" />
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:orientation="horizontal">
+
+					<LinearLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:gravity="center_horizontal"
+						android:orientation="vertical">
+
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:orientation="horizontal">
+
+							<ImageView
+								android:layout_width="16dp"
+								android:layout_height="16dp"
+								android:layout_marginEnd="2dp"
+								tools:src="@drawable/ic_sunny" />
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:textSize="12sp"
+								tools:text="12°" />
+						</LinearLayout>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textColor="?android:textColorSecondary"
+							android:textSize="12sp"
+							tools:text="12:00" />
+					</LinearLayout>
+
+					<LinearLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="8dp"
+						android:layout_marginEnd="8dp"
+						android:gravity="center_horizontal"
+						android:orientation="vertical">
+
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:orientation="horizontal">
+
+							<ImageView
+								android:layout_width="16dp"
+								android:layout_height="16dp"
+								android:layout_marginEnd="2dp"
+								tools:src="@drawable/ic_sunny" />
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:textSize="12sp"
+								tools:text="12°" />
+						</LinearLayout>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textColor="?android:textColorSecondary"
+							android:textSize="12sp"
+							tools:text="12:00" />
+					</LinearLayout>
+
+					<LinearLayout
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:gravity="center_horizontal"
+						android:orientation="vertical">
+
+						<LinearLayout
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:orientation="horizontal">
+
+							<ImageView
+								android:layout_width="16dp"
+								android:layout_height="16dp"
+								android:layout_marginEnd="2dp"
+								tools:src="@drawable/ic_sunny" />
+
+							<TextView
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:textSize="12sp"
+								tools:text="12°" />
+						</LinearLayout>
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textColor="?android:textColorSecondary"
+							android:textSize="12sp"
+							tools:text="12:00" />
+					</LinearLayout>
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="2dp"
+					android:layout_marginTop="8dp"
+					android:background="@color/colorTextPrimary" />
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:background="?android:selectableItemBackgroundBorderless"
+					android:clickable="true"
+					android:focusable="true"
+					android:fontFamily="sans-serif-condensed"
+					android:gravity="center"
+					android:paddingTop="8dp"
+					android:paddingBottom="8dp"
+					android:text="Daily\nforecast"
+					android:textSize="24sp" />
+			</LinearLayout>
+		</ScrollView>
+
+		<ProgressBar
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center" />
+	</ViewFlipper>
+</layout>

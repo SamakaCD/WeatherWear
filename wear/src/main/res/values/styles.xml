@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="WeatherWearTheme" parent="@android:style/Theme.DeviceDefault">
+		<item name="android:colorAccent">@color/colorTextPrimary</item>
+		<item name="android:textColor">@color/colorTextPrimary</item>
+		<item name="android:textColorSecondary">@color/colorTextSecondary</item>
+		<item name="android:windowBackground">@color/colorBackground</item>
+	</style>
+</resources>

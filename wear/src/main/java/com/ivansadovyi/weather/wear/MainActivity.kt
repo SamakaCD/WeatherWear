@@ -7,11 +7,13 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
 import android.support.wearable.activity.WearableActivity
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.Wearable
 import com.ivansadovyi.weather.wear.api.ApiServiceContainer
 import com.ivansadovyi.weather.wear.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
@@ -31,10 +33,32 @@ class MainActivity : WearableActivity() {
 		coroutineScope.launch(exceptionHandler) {
 			requestNetwork()
 			val location = fetchLocation()
-			binding.currentWeather = ApiServiceContainer.apiService
-					.getCurrentWeatherAsync(location.latitude, location.longitude).await().weather
+
+			val currentWeatherResponse = async {
+				binding.currentWeather = ApiServiceContainer.apiService
+						.getCurrentWeatherAsync(location.latitude, location.longitude).await().weather
+			}
+
+			val forecastResponse = async {
+				binding.forecast = ApiServiceContainer.apiService
+						.getForecastAsync(location.latitude, location.longitude).await().items
+			}
+
+			val dailyForecastResponse = async {
+				binding.dailyForecast = ApiServiceContainer.apiService
+						.getForecastAsync(location.latitude, location.longitude).await().items
+						.distinctBy { it.date.day }
+			}
+
+			currentWeatherResponse.await()
+			forecastResponse.await()
+			dailyForecastResponse.await()
 			binding.loading = false
 		}
+	}
+
+	fun onDailyForecastClick(view: View) {
+		scrollView.pageScroll(View.FOCUS_DOWN)
 	}
 
 	private suspend fun fetchLocation(): Location {

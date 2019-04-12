@@ -1,6 +1,6 @@
 package com.ivansadovyi.weather.wear
 
-class Weather(
+data class Weather(
 		val temperature: Int,
 		val icon: Icon,
 		val description: String

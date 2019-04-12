@@ -3,6 +3,7 @@ package com.ivansadovyi.weather.wear.api
 import com.google.gson.GsonBuilder
 import com.ivansadovyi.weather.wear.Weather
 import com.ivansadovyi.weather.wear.api.deserializers.CurrentWeatherResponseDeserializer
+import com.ivansadovyi.weather.wear.api.deserializers.ForecastResponseDeserializer
 import com.ivansadovyi.weather.wear.api.deserializers.IconDeserializer
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
@@ -20,6 +21,7 @@ object ApiServiceContainer {
 		val gson = GsonBuilder()
 				.registerTypeAdapter(Weather.Icon::class.java, IconDeserializer())
 				.registerTypeAdapter(CurrentWeatherResponse::class.java, CurrentWeatherResponseDeserializer())
+				.registerTypeAdapter(ForecastResponse::class.java, ForecastResponseDeserializer())
 				.create()
 
 		val httpClient = OkHttpClient.Builder()

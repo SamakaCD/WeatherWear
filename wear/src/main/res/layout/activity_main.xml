@@ -10,6 +10,16 @@
 		<variable
 			name="currentWeather"
 			type="com.ivansadovyi.weather.wear.Weather" />
+
+		<variable
+			name="forecast"
+			type="java.util.List&lt;com.ivansadovyi.weather.wear.DailyWeather&gt;" />
+
+		<variable
+			name="dailyForecast"
+			type="java.util.List&lt;com.ivansadovyi.weather.wear.DailyWeather&gt;" />
+
+		<import type="android.text.format.DateUtils" />
 	</data>
 
 	<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,6 +32,7 @@
 		app:displayedChild="@{(loading ?? true) ? 1 : 0}">
 
 		<ScrollView
+			android:id="@+id/scrollView"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:clipToPadding="false"
@@ -82,11 +93,13 @@
 								android:layout_width="16dp"
 								android:layout_height="16dp"
 								android:layout_marginEnd="2dp"
+								app:imageResource="@{forecast[0].icon}"
 								tools:src="@drawable/ic_sunny" />
 
 							<TextView
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
+								android:text="@{`` + forecast[0].avgTemperature + `°`}"
 								android:textSize="12sp"
 								tools:text="12°" />
 						</LinearLayout>
@@ -94,6 +107,7 @@
 						<TextView
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
+							android:text="@{DateUtils.formatDateTime(context, forecast[0].date.time, DateUtils.FORMAT_SHOW_TIME)}"
 							android:textColor="?android:textColorSecondary"
 							android:textSize="12sp"
 							tools:text="12:00" />
@@ -102,8 +116,8 @@
 					<LinearLayout
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_marginStart="8dp"
-						android:layout_marginEnd="8dp"
+						android:layout_marginStart="16dp"
+						android:layout_marginEnd="16dp"
 						android:gravity="center_horizontal"
 						android:orientation="vertical">
 
@@ -116,11 +130,13 @@
 								android:layout_width="16dp"
 								android:layout_height="16dp"
 								android:layout_marginEnd="2dp"
+								app:imageResource="@{forecast[1].icon}"
 								tools:src="@drawable/ic_sunny" />
 
 							<TextView
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
+								android:text="@{`` + forecast[1].avgTemperature + `°`}"
 								android:textSize="12sp"
 								tools:text="12°" />
 						</LinearLayout>
@@ -128,6 +144,7 @@
 						<TextView
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
+							android:text="@{DateUtils.formatDateTime(context, forecast[1].date.time, DateUtils.FORMAT_SHOW_TIME)}"
 							android:textColor="?android:textColorSecondary"
 							android:textSize="12sp"
 							tools:text="12:00" />
@@ -148,11 +165,13 @@
 								android:layout_width="16dp"
 								android:layout_height="16dp"
 								android:layout_marginEnd="2dp"
+								app:imageResource="@{forecast[2].icon}"
 								tools:src="@drawable/ic_sunny" />
 
 							<TextView
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
+								android:text="@{`` + forecast[2].avgTemperature + `°`}"
 								android:textSize="12sp"
 								tools:text="12°" />
 						</LinearLayout>
@@ -160,6 +179,7 @@
 						<TextView
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content"
+							android:text="@{DateUtils.formatDateTime(context, forecast[2].date.time, DateUtils.FORMAT_SHOW_TIME)}"
 							android:textColor="?android:textColorSecondary"
 							android:textSize="12sp"
 							tools:text="12:00" />
@@ -182,8 +202,126 @@
 					android:gravity="center"
 					android:paddingTop="8dp"
 					android:paddingBottom="8dp"
+					android:onClick="onDailyForecastClick"
 					android:text="Daily\nforecast"
 					android:textSize="24sp" />
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_width="20dp"
+						android:layout_height="20dp"
+						android:layout_marginEnd="2dp"
+						app:imageResource="@{dailyForecast[0].icon}"
+						tools:src="@drawable/ic_sunny" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{DateUtils.formatDateTime(context, dailyForecast[0].date.time, DateUtils.FORMAT_ABBREV_WEEKDAY)}"
+						android:textStyle="bold"
+						tools:text="Fri" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{`` + dailyForecast[0].maxTemperature + `°`}"
+						tools:text="12°" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{`` + dailyForecast[0].minTemperature + `°`}"
+						android:textColor="?android:textColorSecondary"
+						tools:text="12°" />
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="8dp"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_width="20dp"
+						android:layout_height="20dp"
+						android:layout_marginEnd="2dp"
+						app:imageResource="@{dailyForecast[1].icon}"
+						tools:src="@drawable/ic_sunny" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{DateUtils.formatDateTime(context, dailyForecast[1].date.time, DateUtils.FORMAT_ABBREV_WEEKDAY)}"
+						android:textStyle="bold"
+						tools:text="Fri" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{`` + dailyForecast[1].maxTemperature + `°`}"
+						tools:text="12°" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{`` + dailyForecast[1].minTemperature + `°`}"
+						android:textColor="?android:textColorSecondary"
+						tools:text="12°" />
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="8dp"
+					android:gravity="center_vertical"
+					android:orientation="horizontal">
+
+					<ImageView
+						android:layout_width="20dp"
+						android:layout_height="20dp"
+						android:layout_marginEnd="2dp"
+						app:imageResource="@{dailyForecast[2].icon}"
+						tools:src="@drawable/ic_sunny" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{DateUtils.formatDateTime(context, dailyForecast[2].date.time, DateUtils.FORMAT_ABBREV_WEEKDAY)}"
+						android:textStyle="bold"
+						tools:text="Fri" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{`` + dailyForecast[2].maxTemperature + `°`}"
+						tools:text="12°" />
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="4dp"
+						android:text="@{`` + dailyForecast[2].minTemperature + `°`}"
+						android:textColor="?android:textColorSecondary"
+						tools:text="12°" />
+				</LinearLayout>
+
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="32dp" />
 			</LinearLayout>
 		</ScrollView>
 

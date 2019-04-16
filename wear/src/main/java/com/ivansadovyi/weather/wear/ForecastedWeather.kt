@@ -2,7 +2,7 @@ package com.ivansadovyi.weather.wear
 
 import java.util.*
 
-data class DailyWeather(
+data class ForecastedWeather(
 		val icon: Weather.Icon,
 		val date: Date,
 		val avgTemperature: Int,

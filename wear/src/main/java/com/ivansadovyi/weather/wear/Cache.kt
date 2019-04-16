@@ -18,15 +18,15 @@ class Cache(context: Context) {
 		return gson.fromJson(jsonWeather, Weather::class.java)
 	}
 
-	fun getForecast(): List<DailyWeather>? {
+	fun getForecast(): List<ForecastedWeather>? {
 		val jsonForecast = preferences.getString(FORECAST, null)
-		val type = object : TypeToken<List<DailyWeather>>() { }.type
+		val type = object : TypeToken<List<ForecastedWeather>>() { }.type
 		return gson.fromJson(jsonForecast, type)
 	}
 
-	fun getDailyForecast(): List<DailyWeather>? {
+	fun getDailyForecast(): List<ForecastedWeather>? {
 		val jsonDailyForecast = preferences.getString(DAILY_FORECAST, null)
-		val type = object : TypeToken<List<DailyWeather>>() { }.type
+		val type = object : TypeToken<List<ForecastedWeather>>() { }.type
 		return gson.fromJson(jsonDailyForecast, type)
 	}
 
@@ -35,14 +35,14 @@ class Cache(context: Context) {
 		preferences.edit().putString(CURRENT_WEATHER, jsonWeather).apply()
 	}
 
-	fun putForecast(forecast: List<DailyWeather>) {
-		val type = object : TypeToken<List<DailyWeather>>() { }.type
+	fun putForecast(forecast: List<ForecastedWeather>) {
+		val type = object : TypeToken<List<ForecastedWeather>>() { }.type
 		val jsonForecast = gson.toJson(forecast, type)
 		preferences.edit().putString(FORECAST, jsonForecast).apply()
 	}
 
-	fun putDailyForecast(dailyForecast: List<DailyWeather>) {
-		val type = object : TypeToken<List<DailyWeather>>() { }.type
+	fun putDailyForecast(dailyForecast: List<ForecastedWeather>) {
+		val type = object : TypeToken<List<ForecastedWeather>>() { }.type
 		val jsonForecast = gson.toJson(dailyForecast, type)
 		preferences.edit().putString(DAILY_FORECAST, jsonForecast).apply()
 	}

@@ -56,7 +56,7 @@ class MainActivity : WearableActivity() {
 						.getForecastAsync(location.latitude, location.longitude).await().items
 						.groupBy { it.date.date }
 						.map { (_, items) ->
-							DailyWeather(
+							ForecastedWeather(
 									icon = items.first().icon,
 									date = items.first().date,
 									avgTemperature = items.map { it.avgTemperature }.average().toInt(),

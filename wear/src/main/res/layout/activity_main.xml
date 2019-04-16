@@ -13,11 +13,11 @@
 
 		<variable
 			name="forecast"
-			type="java.util.List&lt;com.ivansadovyi.weather.wear.DailyWeather&gt;" />
+			type="java.util.List&lt;com.ivansadovyi.weather.wear.ForecastedWeather&gt;" />
 
 		<variable
 			name="dailyForecast"
-			type="java.util.List&lt;com.ivansadovyi.weather.wear.DailyWeather&gt;" />
+			type="java.util.List&lt;com.ivansadovyi.weather.wear.ForecastedWeather&gt;" />
 
 		<import type="android.text.format.DateUtils" />
 	</data>

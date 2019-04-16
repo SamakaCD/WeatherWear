@@ -1,13 +1,18 @@
 package com.ivansadovyi.weather.wear
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
 import android.support.wearable.activity.WearableActivity
+import android.text.format.DateUtils
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import com.crashlytics.android.Crashlytics
 import com.google.android.gms.wearable.DataMapItem
@@ -18,6 +23,7 @@ import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import java.util.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -72,11 +78,20 @@ class MainActivity : WearableActivity() {
 			forecastResponse.await()
 			dailyForecastResponse.await()
 			binding.loading = false
+			if (willItRainTomorrow(binding.forecast ?: emptyList())) {
+				setupRainNotification()
+			}
 		}
 	}
 
 	fun onDailyForecastClick(view: View) {
 		scrollView.pageScroll(View.FOCUS_DOWN)
+	}
+
+	private fun willItRainTomorrow(forecast: List<ForecastedWeather>): Boolean {
+		return forecast
+				.filter { DateUtils.isToday(it.date.time - DateUtils.DAY_IN_MILLIS) }
+				.any { it.icon == Weather.Icon.RAIN }
 	}
 
 	private suspend fun fetchLocation(): Location {
@@ -117,6 +132,20 @@ class MainActivity : WearableActivity() {
 			binding.dailyForecast = cache.getDailyForecast()
 			binding.loading = false
 		}
+	}
+
+	private fun setupRainNotification() {
+		val calendar = Calendar.getInstance().apply {
+			set(Calendar.HOUR_OF_DAY, 10)
+			set(Calendar.MINUTE, 0)
+			set(Calendar.SECOND, 0)
+			add(Calendar.DATE, 1)
+		}
+
+		val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+		val broadcastIntent = Intent(this, NotificationAlarmReceiver::class.java)
+		val pendingIntent = PendingIntent.getBroadcast(this, 0, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 	}
 
 	private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->

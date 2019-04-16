@@ -1,3 +1,5 @@
 <resources>
 	<string name="app_name">WeatherWear</string>
+	<string name="notification_rain_title">It will be rainy today</string>
+	<string name="notification_rain_description">Don\'t forget an umbrella.</string>
 </resources>

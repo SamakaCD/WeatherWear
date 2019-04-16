@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="colorAccent">#FF5252</color>
+	<color name="colorRainNotification">#40C4FF</color>
 	<color name="colorBackground">#000</color>
 	<color name="colorTextPrimary">#FFF</color>
 	<color name="colorTextSecondary">#8FFF</color>

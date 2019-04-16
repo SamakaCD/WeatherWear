@@ -9,7 +9,6 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -39,7 +38,6 @@ object ApiServiceContainer {
 						return chain.proceed(request)
 					}
 				})
-				.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
 				.build()
 
 		apiService = Retrofit.Builder()

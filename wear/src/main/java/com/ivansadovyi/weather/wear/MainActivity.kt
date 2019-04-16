@@ -22,11 +22,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-
-
-
 class MainActivity : WearableActivity() {
 
+	private val cache by lazy { Cache(this) }
 	private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 	private lateinit var binding: ActivityMainBinding
 
@@ -35,23 +33,39 @@ class MainActivity : WearableActivity() {
 		binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 		Fabric.with(this, Crashlytics())
 		coroutineScope.launch(exceptionHandler) {
+			restoreCachedData()
 			requestNetwork()
 			val location = fetchLocation()
 
 			val currentWeatherResponse = async {
-				binding.currentWeather = ApiServiceContainer.apiService
+				val currentWeather = ApiServiceContainer.apiService
 						.getCurrentWeatherAsync(location.latitude, location.longitude).await().weather
+				cache.putCurrentWeather(currentWeather)
+				binding.currentWeather = currentWeather
 			}
 
 			val forecastResponse = async {
-				binding.forecast = ApiServiceContainer.apiService
+				val forecast = ApiServiceContainer.apiService
 						.getForecastAsync(location.latitude, location.longitude).await().items
+				cache.putForecast(forecast)
+				binding.forecast = forecast
 			}
 
 			val dailyForecastResponse = async {
-				binding.dailyForecast = ApiServiceContainer.apiService
+				val dailyForecast = ApiServiceContainer.apiService
 						.getForecastAsync(location.latitude, location.longitude).await().items
-						.distinctBy { it.date.day }
+						.groupBy { it.date.date }
+						.map { (_, items) ->
+							DailyWeather(
+									icon = items.first().icon,
+									date = items.first().date,
+									avgTemperature = items.map { it.avgTemperature }.average().toInt(),
+									minTemperature = items.map { it.minTemperature }.min() ?: 0,
+									maxTemperature = items.map { it.maxTemperature }.max() ?: 0
+							)
+						}
+				cache.putDailyForecast(dailyForecast)
+				binding.dailyForecast = dailyForecast
 			}
 
 			currentWeatherResponse.await()
@@ -96,7 +110,17 @@ class MainActivity : WearableActivity() {
 		}
 	}
 
+	private fun restoreCachedData() {
+		if (cache.hasData()) {
+			binding.currentWeather = cache.getCurrentWeather()
+			binding.forecast = cache.getForecast()
+			binding.dailyForecast = cache.getDailyForecast()
+			binding.loading = false
+		}
+	}
+
 	private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
 		throwable.printStackTrace()
+		Crashlytics.logException(throwable)
 	}
 }

@@ -20,12 +20,11 @@ import java.util.*
 
 class SettingsActivity : AppCompatActivity() {
 
-	private lateinit var preferences: Preferences
+	private val preferences by lazy { Preferences(this) }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		Fabric.with(this, Crashlytics())
-		preferences = Preferences(this)
 		setContentView(R.layout.activity_settings)
 		setTitle(R.string.settings_title)
 		restorePreferences()
